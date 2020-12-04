@@ -2,10 +2,10 @@
 基于头部控制的贪吃蛇游戏
 ## 简介
 本游戏分为游戏本体与控制算法。游戏本体为贪吃蛇游戏，使用pygame框架实现。控制算法为使用电脑摄像头获取人脸朝向的算法，用于对人脸朝向进行捕捉，并用于对游戏中的贪吃蛇进行控制。<br>
-游戏本体我们借用了别人的部分代码，参考链接如下：
+- 游戏本体:我们借用了别人的部分代码，参考链接如下：
 https://blog.csdn.net/weixin_41775042/article/details/79575925 <br>
-人脸朝向算法分为两部分：人脸检测算法与人脸朝向分类算法。其中人脸检测算法我们借用了DFace (Deeplearning Face)，参考链接如下：
-https://github.com/kuaikuaikim/DFace <br>
+- 人脸朝向算法分为两部分：人脸检测算法与人脸朝向分类算法。其中人脸检测算法我们借用了DFace (Deeplearning Face)，参考链接如下：
+https://github.com/kuaikuaikim/DFace 
 为了保证实时性，人脸朝向分类算法我们采用一个小型的网络进行分类。
 
 ## 安装
@@ -29,7 +29,7 @@ git clone https://github.com/binging512/FC-Snake-Game.git
 ``` shell
 python3 -m pip install -r requirements.txt
 ```
-3.下载模型权重文件（百度网盘）<br>
+3. 下载模型权重文件（百度网盘）<br>
 链接：https://pan.baidu.com/s/1BvIJI0EQoiAxJpFrEv9HRg <br>
 提取码：y46f <br>
 4. 运行游戏
@@ -52,8 +52,8 @@ python games.py
 python train_cnet.py
 ```
 ## 界面预览
-![](../pic/1.jpg)
-![](../pic/2.jpg)
+![](./1.jpg)
+![](./2.jpg)
 
 
 

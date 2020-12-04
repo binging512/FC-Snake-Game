@@ -1,0 +1,6 @@
+torch
+torchvision
+opencv_python
+easygui
+pygame
+numpy

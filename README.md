@@ -52,8 +52,8 @@ python games.py
 python train_cnet.py
 ```
 ## 界面预览
-![](./1.jpg)
-![](./2.jpg)
+![image1](./1.jpg)
+![image2](./2.jpg)
 
 
 

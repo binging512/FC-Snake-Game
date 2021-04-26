@@ -81,7 +81,7 @@ class Snake(GameObject):
         '''撞墙返回真，否则返回假'''
         head = self._nodes[0]
         x, y, size = head.x, head.y, head.size
-        if x > 1000 or x < 10 or y > 1000 or y < 10:
+        if x > 600 or x < 10 or y > 600 or y < 10:
             return True
         return False
     def eat_food(self, food):
@@ -133,15 +133,15 @@ class Food(GameObject):
         # 处理圆和半径的中心点 否则无法相遇
         self._hide = not self._hide
 
-def game():    
-    def refresh():
+def game():
+    def refresh(screen, snake, wall, food):
         '''刷新游戏窗口'''
         screen.fill((242, 242, 242))
         snake.draw(screen)
         wall.draw(screen)
         food.draw(screen)
         pygame.display.flip()
-    def handle_key_event(key_event):
+    def handle_key_event(key_event,snake):
         key = key_event.key
         if key == K_UP:
             new_dir = UP
@@ -155,7 +155,7 @@ def game():
             new_dir = key
         if new_dir != snake.dir:
             snake.change_dir(new_dir)
-    def handle_face_out(key):
+    def handle_face_out(key,snake):
         if key == 0:
             print(11111)
             return 0
@@ -170,12 +170,12 @@ def game():
         else:
             new_dir = key
         if new_dir != snake.dir:
-            snake.change_dir(new_dir)        
+            snake.change_dir(new_dir)
     def create_food():
         row = randint(1, 28)
         col = randint(1, 28)
         return Food(10 + 20 * row, 10 + 20 * col, 20)
-    def count_txt(snake):
+    def count_txt(snake, screen):
         score = len(snake._nodes) - 5
         my_font = pygame.font.SysFont('楷体', 60)
         game_over = my_font.render('GAME OVER', False, [0, 0, 0])
@@ -183,47 +183,138 @@ def game():
         screen.blit(score, (400, 30))
         screen.blit(game_over, (180, 260))
         pygame.display.flip()
-    wall = Wall(10, 10, 1000, 800)
-    food = create_food()
-    snake = Snake()
+    def game_init():
+        wall = Wall(10, 10, 600, 600)
+        food = create_food()
+        snake = Snake()
+        pygame.init()
+        screen = pygame.display.set_mode((620,620))
+        pygame.display.set_caption('贪吃蛇')
+        background = screen.fill((242, 242, 242))
+        pygame.display.flip()
+        clock = pygame.time.Clock()
+        # game_init()
+        running = True
+        over = True
+        global face_out
+        face_out = 0
+        while running:
+            handle_face_out(face_out, snake)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN:
+                    handle_key_event(event,snake)
+            if over:
+                refresh(screen, snake, wall, food)
+            clock.tick(10)
+            if over:
+                snake.move()
+                # time.sleep(0.1)
+                if snake.eat_food(food):
+                    food = create_food()
+                if snake.is_over() or snake.eat_me():
+                    count_txt(snake, screen)
+                    time.sleep(1)
+                    pygame.quit()
+                    return 0
+    def controlGame_init():
+        pygame.init()
+        ck = pygame.display.set_mode((800,600))   
+        pygame.display.set_caption("贪吃蛇")    
+        clock = pygame.time.Clock()                         
+        start_ck = pygame.Surface(ck.get_size())   
+        start_ck2 = pygame.Surface(ck.get_size())  
+        start_ck = start_ck.convert()
+        start_ck2 = start_ck2.convert()
+        start_ck.fill((255,255,255)) 
+        start_ck2.fill((0,255,0))
+        i1 = pygame.image.load("./image5.png")
+        i1.convert()
+        i11 = pygame.image.load("./image4.png")
+        i11.convert()
+        running = True
+
+        global face_out
+        face_out = 0
+        while running:
+            start_ck.blit(i11, (300, 240))
+            start_ck.blit(i1, (120, 400))
+            ck.blit(start_ck,(0,0))
+            pygame.display.update()
+            # print(face_out)
+            # handle_face_out(face_out,snake)
+            clock.tick(10)
+            if face_out == 2:
+                running = False
+                pygame.quit()
+                return True
+            elif face_out == 3 or face_out == 4:
+                pygame.quit()
+                exit()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    key = event.key
+                    if key == K_DOWN:
+                        running = False
+                        pygame.quit()
+                        return True
+                    elif key == K_RIGHT or key == K_LEFT:
+                        pygame.quit()
+                        exit()
+                elif event.type == pygame.QUIT:
+                    print("游戏退出...")
+                    pygame.quit()
+                    exit()
     pygame.init()
-    screen = pygame.display.set_mode((1020, 820))
-    pygame.display.set_caption('贪吃蛇')
-    background = screen.fill((242, 242, 242))
-    pygame.display.flip()
+    ck = pygame.display.set_mode((800,600))
+    pygame.display.set_caption("贪吃蛇")
     clock = pygame.time.Clock()
+    start_ck = pygame.Surface(ck.get_size())
+    start_ck2 = pygame.Surface(ck.get_size())
+    start_ck = start_ck.convert()
+    start_ck2 = start_ck2.convert()
+    start_ck.fill((255,255,255))  
+    start_ck2.fill((0,255,0))
+    i1 = pygame.image.load("./image3.png")
+    i1.convert()
+    i11 = pygame.image.load("./image2.png")
+    i11.convert()
     running = True
-    over = True
 
     global face_out
     face_out = 0
     while running:
-        #----------------------------------------------#
-        #for event in pygame.event.get():
-        #    if event.type == pygame.QUIT:
-        #        running = False
-        #    elif event.type == pygame.KEYDOWN:
-        #        handle_key_event(event)
-        print(face_out)
-        handle_face_out(face_out)
+        start_ck.blit(i11, (300, 400))
+        start_ck.blit(i1, (120, 240))
+        ck.blit(start_ck,(0,0))
+        pygame.display.update()
+        #print(face_out)
+        #handle_face_out(face_out,snake)
+        if face_out == 2:
+            running = False
+            pygame.quit()
+        clock.tick(10)
+        # for event in pygame.event.get():
+        #     if event.type == pygame.KEYDOWN:
+        #         key = event.key
+        #         if key == K_DOWN:
+        #             running = False
+        #             pygame.quit()
+        #     elif event.type == pygame.QUIT:
+        #         print("游戏退出...")
+        #         # quit 卸载所有的模块
+        #         pygame.quit()
+        #         # exit() 直接终止当前正在执行的程序
+        #         exit()
 
-        if over:
-            refresh()
-        clock.tick(5)
-        if over:
-            snake.move()
-            # time.sleep(0.1)
-            if snake.eat_food(food):
-                food = create_food()
-            if snake.is_over() or snake.eat_me():
-                count_txt(snake)
-                Yes_or_No = easygui.buttonbox("不好意思，游戏结束", choices=['我不服我还要玩', '我不玩了886'])
-                if Yes_or_No == '我不服我还要玩':
-                    snake = Snake()
-                    pygame.event.clear()
-                else:
-                    over = False
-    pygame.quit()
+    while(True):
+        game_init()
+        ifquit = controlGame_init()
+        if ifquit:
+            continue
+        else:
+            break
 
 def face_detection():
     global face_out
